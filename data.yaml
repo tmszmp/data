@@ -17,6 +17,12 @@ spec:
       - image: gcr.io/proud-effect-284706/cities:latest
         imagePullPolicy: Always
         name: cities-app
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: backend-user
+              key: backend-pw
         ports:
         - containerPort: 3306
           protocol: TCP
