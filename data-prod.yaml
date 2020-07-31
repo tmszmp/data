@@ -1,0 +1,87 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cities-app
+  namespace: default
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      run: cities-app
+  template:
+    metadata:
+      labels:
+        run: cities-app
+    spec:
+      containers:
+      - image: gcr.io/produktiv-umgebung/cities:latest
+        imagePullPolicy: Always
+        name: cities-app
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: backend-user
+              key: backend-pw
+        ports:
+        - containerPort: 3306
+          protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cities-service
+  namespace: default
+spec:
+  type: ClusterIP
+  selector:
+    run: cities-app
+  ports:
+  - name: sql
+    protocol: TCP
+    port: 3306
+    targetPort: 3306
+  clusterIP: 10.7.252.12
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wetter-app
+  namespace: default
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      run: wetter-app
+  template:
+    metadata:
+      labels:
+        run: wetter-app
+    spec:
+      containers:
+      - image: gcr.io/produktiv-umgebung/wetter
+        imagePullPolicy: Always
+        name: wetter-app
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: backend-user
+              key: backend-pw
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: wetter-service
+  namespace: default
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    run: wetter-app
+  type: LoadBalancer
