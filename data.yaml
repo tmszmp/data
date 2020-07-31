@@ -21,6 +21,9 @@ spec:
           preStop:
             exec:
               command: ["/bin/sh", "-c", "sleep 10"]
+          postStart:
+            exec:
+              command: ["/bin/sh", "-c", "sleep 10"]
         env:
         - name: MYSQL_ROOT_PASSWORD
           valueFrom:
@@ -68,6 +71,9 @@ spec:
         name: wetter-app
         lifecycle:
           preStop:
+            exec:
+              command: ["/bin/sh", "-c", "sleep 10"]
+          postStart:
             exec:
               command: ["/bin/sh", "-c", "sleep 10"]
         env:
