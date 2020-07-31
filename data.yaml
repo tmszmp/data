@@ -17,6 +17,10 @@ spec:
       - image: gcr.io/proud-effect-284706/cities:latest
         imagePullPolicy: Always
         name: cities-app
+        lifecycle:
+          preStop:
+            exec:
+              command: ["/bin/sh", "-c", "sleep 10"]
         env:
         - name: MYSQL_ROOT_PASSWORD
           valueFrom:
@@ -62,6 +66,10 @@ spec:
       - image: gcr.io/proud-effect-284706/wetter
         imagePullPolicy: Always
         name: wetter-app
+        lifecycle:
+          preStop:
+            exec:
+              command: ["/bin/sh", "-c", "sleep 10"]
         env:
         - name: MYSQL_ROOT_PASSWORD
           valueFrom:
