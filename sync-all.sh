@@ -10,3 +10,4 @@ git pull
 kubectl apply -f /home/tim_schatz/test.yaml
 kubectl rollout restart deployment.apps/wetter-app
 kubectl rollout restart deployment.apps/cities-app
+kubectl get services
